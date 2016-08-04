@@ -1,0 +1,11 @@
+
+DROP TABLE IF EXISTS $table.name;
+CREATE TABLE $table.name (
+  #foreach( $attr in $table.attrs) 
+  	$attr.column $attr.dataType#if($attr.length!=0)($attr.length)#end #if($attr.isNull == false) NOT NULL #end #if($attr.desc!="")COMMENT '$attr.desc'#end #if($attr.defaultValue!="")DEFAULT '$attr.defaultValue'#end
+  	,
+  #end	
+  
+  PRIMARY KEY ($table.pk.column)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

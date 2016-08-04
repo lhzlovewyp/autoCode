@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="$package_mapper">
+     
+    
+    <resultMap type="$modelNameFirstLow" id="$modelNameFirstLow">
+    #foreach( $attr in $table.attrs) 
+     <result property="$attr.voname" column="$attr.column" />
+    #end	
+</resultMap>
+    
+    
+    
+	<select id="get${modelName}ByID" parameterType="string" resultMap="$modelNameFirstLow">
+		SELECT a.* FROM ${table.name} a
+		WHERE a.ID=#{id} 
+	</select>
+	
+	<select id="get${modelName}PageByCondition" parameterType="java.util.Map" resultMap="$modelNameFirstLow">
+		SELECT a.* FROM ${table.name} a WHERE 1=1  
+	#foreach( $attr in $table.attrs)
+	<if test="$attr.voname!=null and $attr.voname!='' ">     
+    	AND  a.$attr.column=#{$attr.voname}
+    	</if> 
+	#end
+</select>
+	
+	<select id="get${modelName}CountByCondition" parameterType="java.util.Map" resultType="int">
+		SELECT count(1) FROM ${table.name} a WHERE 1=1
+	#foreach( $attr in $table.attrs)
+	<if test="$attr.voname!=null and $attr.voname!='' ">     
+          AND  a.$attr.column=#{$attr.voname}
+        </if> 
+	#end
+	</select>
+	
+	<delete id="delete${modelName}ByID" parameterType="string">
+		DELETE FROM ${table.name} where 1=1
+	#foreach( $attr in $table.attrs)
+	<if test="$attr.voname!=null and $attr.voname!='' ">     
+          AND  a.$attr.column=#{$attr.voname}
+        </if> 
+	#end
+	</delete>
+	
+	<insert id="insert${modelName}" parameterType="$modelNameFirstLow">
+		insert into ${table.name} <include refid="$modelNameFirstLowSet" />
+	</insert>
+	
+	<update id="update${modelName}" parameterType="$modelNameFirstLowSet" >
+		UPDATE ${table.name} <include refid="$modelNameFirstLowSetSet" /> WHERE ID = #{id}
+	</update>
+    
+    <sql id="$modelNameFirstLowSetSet">
+		<set>
+	#foreach( $attr in $table.attrs)
+		<if test="$attr.voname!=null and $attr.voname!='' ">     
+	            a.$attr.column=#{$attr.voname},
+	        </if> 
+		#end
+</set>
+	</sql >
+    
+</mapper>

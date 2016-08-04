@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joker.common.mapper">
+     
+    
+    <resultMap type="testModel" id="testModel">
+         <result property="id" column="id" />
+         <result property="name" column="name" />
+         <result property="code" column="code" />
+    </resultMap>
+    
+    
+    
+	<select id="getTestModelByID" parameterType="string" resultMap="testModel">
+		SELECT a.* FROM TEST_MODEL a
+		WHERE a.ID=#{id} 
+	</select>
+	
+	<select id="getTestModelPageByCondition" parameterType="java.util.Map" resultMap="testModel">
+		SELECT a.* FROM TEST_MODEL a WHERE 1=1  
+		<if test="id!=null and id!='' ">     
+    	AND  a.id=#{id}
+    	</if> 
+		<if test="name!=null and name!='' ">     
+    	AND  a.name=#{name}
+    	</if> 
+		<if test="code!=null and code!='' ">     
+    	AND  a.code=#{code}
+    	</if> 
+	</select>
+	
+	<select id="getTestModelCountByCondition" parameterType="java.util.Map" resultType="int">
+		SELECT count(1) FROM TEST_MODEL a WHERE 1=1
+		<if test="id!=null and id!='' ">     
+          AND  a.id=#{id}
+        </if> 
+		<if test="name!=null and name!='' ">     
+          AND  a.name=#{name}
+        </if> 
+		<if test="code!=null and code!='' ">     
+          AND  a.code=#{code}
+        </if> 
+		</select>
+	
+	<delete id="deleteTestModelByID" parameterType="string">
+		DELETE FROM TEST_MODEL where 1=1
+		<if test="id!=null and id!='' ">     
+          AND  a.id=#{id}
+        </if> 
+		<if test="name!=null and name!='' ">     
+          AND  a.name=#{name}
+        </if> 
+		<if test="code!=null and code!='' ">     
+          AND  a.code=#{code}
+        </if> 
+		</delete>
+	
+	<insert id="insertTestModel" parameterType="testModel">
+		insert into TEST_MODEL <include refid="$modelNameFirstLowSet" />
+	</insert>
+	
+	<update id="updateTestModel" parameterType="$modelNameFirstLowSet" >
+		UPDATE TEST_MODEL <include refid="$modelNameFirstLowSetSet" /> WHERE ID = #{id}
+	</update>
+    
+    <sql id="$modelNameFirstLowSetSet">
+		<set>
+			<if test="id!=null and id!='' ">     
+	            a.id=#{id},
+	        </if> 
+				<if test="name!=null and name!='' ">     
+	            a.name=#{name},
+	        </if> 
+				<if test="code!=null and code!='' ">     
+	            a.code=#{code},
+	        </if> 
+		</set>
+	</sql >
+    
+</mapper>
